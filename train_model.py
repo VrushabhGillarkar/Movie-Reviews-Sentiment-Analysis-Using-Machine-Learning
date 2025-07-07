@@ -13,12 +13,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 
-nltk.download('punkt')
-nltk.download('stopwords')
+# 👉 Add this line to tell NLTK where to find the downloaded data
+nltk.data.path.append("./nltk_data")
 
+# 🚫 REMOVE these lines (Render doesn't allow downloads at runtime)
+# nltk.download('punkt')
+# nltk.download('stopwords')
+
+# Load dataset
 dataset = pd.read_csv('Dataset/IMDB.csv')
 dataset.sentiment.replace({'positive': 1, 'negative': 0}, inplace=True)
 
+# Cleaning functions
 def clean_html(text):
     return re.sub(r'<.*?>', '', text)
 
@@ -44,19 +50,25 @@ def preprocess(text):
     words = remove_stopwords(text)
     return stem_text(words)
 
+# Preprocessing
 dataset.review = dataset.review.apply(preprocess)
 
+# Feature extraction
 cv = CountVectorizer(max_features=2000)
 X = cv.fit_transform(dataset.review).toarray()
 y = dataset.sentiment.values
 
+# Train/test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Train model
 model = MultinomialNB()
 model.fit(X_train, y_train)
 
+# Save model and vectorizer
 joblib.dump(model, 'model/MRSA_mnb.pkl')
 joblib.dump(cv, 'model/MRSA_vectorizer.pkl')
 
+# Evaluate
 y_pred = model.predict(X_test)
 print(f"\n🎯 Accuracy: {round(accuracy_score(y_test, y_pred)*100, 2)}%\n")

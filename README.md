@@ -71,7 +71,8 @@ Review	Sentiment	Confidence
 
 ---
 ## 📸Screen Shot
-![Screenshot](https://drive.google.com/uc?export=view&id=YOUR_IMAGE_ID)
+![Screenshot]((https://github.com/VrushabhGillarkar/Movie-Reviews-Sentiment-Analysis-Using-Machine-Learning/blob/main/Screenshot%202025-07-08%20013635.png))
+![Screenshot]((https://github.com/VrushabhGillarkar/Movie-Reviews-Sentiment-Analysis-Using-Machine-Learning/blob/main/Screenshot%202025-07-08%20013635.png))
 
 ---
 ## 📸 Video LINK

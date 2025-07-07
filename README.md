@@ -39,9 +39,8 @@ A **Flask web application** that classifies movie reviews as **positive** or **n
 ├── requirements.txt              # Dependencies
 └── README.md                     # Project readme
 
-
-
-## 📁 Project Structure
+```
+---
  ## 🧠 NLP Pipeline
 
 The following preprocessing steps are applied before prediction:
@@ -60,15 +59,22 @@ Stemming – Converts words to root form using SnowballStemmer
 
 TF-IDF Vectorization – Converts text into numerical features
 
-** 📊 Example Output **
+---
+## 📊 Example Output 
+
 Review	Sentiment	Confidence
+
 "Amazing direction and acting!"	Positive	95.3%
+
 "It was boring and a waste of time."	Negative	91.7%
 
-
+---
 ## 📸 Screenshots
 
-
+---
 ## 👤 Author
+
+
 Developed by Vrushabh Gillarkar
 
+---

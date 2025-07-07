@@ -69,7 +69,9 @@ Review	Sentiment	Confidence
 "It was boring and a waste of time."	Negative	91.7%
 
 ---
-## 📸 Screenshots
+## 📸 Video LINK
+🔗 [Access Resources on Google Drive](https://drive.google.com/file/d/1Ohl2yqDYo2cJ9nKmmSpmZhAOXdOgDYPn/view?usp=drive_link)
+
 
 ---
 ## 👤 Author

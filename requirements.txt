@@ -6,4 +6,5 @@ nltk
 flask
 deep-translator
 langdetect
-
+joblib
+streamlit

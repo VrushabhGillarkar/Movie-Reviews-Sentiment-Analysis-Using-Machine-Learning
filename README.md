@@ -25,7 +25,7 @@ A **Flask web application** that classifies movie reviews as **positive** or **n
 
 ## 📁 Project Structure
 
-```bash
+```
 .
 ├── Models/
 │   ├── MRSA_mnb.pkl              # Trained model
@@ -38,3 +38,37 @@ A **Flask web application** that classifies movie reviews as **positive** or **n
 ├── train_model.py                # Model training script (optional)
 ├── requirements.txt              # Dependencies
 └── README.md                     # Project readme
+
+
+
+## 📁 Project Structure
+ ## 🧠 NLP Pipeline
+
+The following preprocessing steps are applied before prediction:
+
+HTML Tag Removal – Cleans HTML content
+
+Special Characters Removal – Keeps only alphanumeric characters
+
+Lowercasing – Standardizes all text
+
+Tokenization – Breaks text into words
+
+Stopword Removal – Removes common non-informative words
+
+Stemming – Converts words to root form using SnowballStemmer
+
+TF-IDF Vectorization – Converts text into numerical features
+
+** 📊 Example Output **
+Review	Sentiment	Confidence
+"Amazing direction and acting!"	Positive	95.3%
+"It was boring and a waste of time."	Negative	91.7%
+
+
+## 📸 Screenshots
+
+
+## 👤 Author
+Developed by Vrushabh Gillarkar
+

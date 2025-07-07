@@ -1,0 +1,9 @@
+pandas
+numpy
+regex
+scikit-learn
+nltk
+flask
+deep-translator
+langdetect
+

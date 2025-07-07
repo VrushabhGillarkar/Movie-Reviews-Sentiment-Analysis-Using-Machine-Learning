@@ -1,0 +1,66 @@
+.input-area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#mic-btn {
+    font-size: 24px;
+    padding: 8px 12px;
+    background: #00d4ff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+#mic-btn:hover {
+    background: #0fd3a0;
+    transform: scale(1.1);
+}
+
+
+.suggestions {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.suggestions p {
+    color: #aaa;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.suggestions ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.suggestions li {
+    background-color: #1f1f1f;
+    color: #00ffd5;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.suggestions li:hover {
+    background-color: #00ffd5;
+    color: #000;
+    transform: scale(1.03);
+}
+
+
+.suggestions p {
+    color: #aaa;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.85;
+    padding-left: 30px; /* moves text to the right */
+    text-align: left;   /* keeps alignment neat */
+}

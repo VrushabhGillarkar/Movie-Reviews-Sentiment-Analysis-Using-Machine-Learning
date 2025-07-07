@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Review Sentiment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* Global */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      animation: bgfade 8s infinite alternate;
+    }
+    @keyframes bgfade {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 700px;
+      text-align: center;
+      animation: slideUp 0.8s ease-in-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #00ffd5;
+      text-shadow: 0 0 10px rgba(0,255,213,0.4);
+      margin-bottom: 25px;
+    }
+
+    /* Textarea + mic button */
+    .input-area { position: relative; }
+    textarea {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid #00ffd5;
+      border-radius: 15px;
+      background: #0f2027;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      resize: none;
+      box-shadow: inset 0 0 8px rgba(0,255,213,0.3);
+      transition: box-shadow 0.3s ease;
+    }
+    textarea:focus {
+      box-shadow: 0 0 12px #00ffd5;
+    }
+
+    #mic-btn {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      background: transparent;
+      border: none;
+      font-size: 22px;
+      color: #00ffd5;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    #mic-btn:hover {
+      transform: scale(1.2);
+    }
+
+    /* Live feedback */
+    #live-feedback {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    #live-feedback.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #live-feedback.positive { color: #00ff88; }
+    #live-feedback.negative { color: #ff4b5c; }
+    #live-feedback.neutral  { color: #aaa; }
+
+    /* Predict button */
+    .predict-btn {
+      margin-top: 25px;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 50px;
+      background: #00ffd5;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,255,213,0.6);
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .predict-btn:hover {
+      background: #00c4a7;
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(0,255,213,0.8);
+    }
+
+    /* Final result */
+    #final-result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 6px rgba(255,255,255,0.2);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    #final-result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Suggestions */
+    .suggestions {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .suggestions ul {
+      list-style: none;
+      padding: 0;
+    }
+    .suggestions li {
+      padding: 10px 15px;
+      margin: 8px 0;
+      background: #1c2833;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .suggestions li:hover {
+      background: #00ffd5;
+      color: #000;
+      transform: translateX(5px);
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Movie Review Sentiment Analyzer</h1>
+
+    <div class="input-area">
+      <textarea id="review" rows="6" placeholder="Speak or type your movie review..."></textarea>
+      <button type="button" id="mic-btn" title="Click to Speak 🎤">🎤</button>
+    </div>
+
+    <div id="live-feedback" class="neutral">Start typing to see live sentiment...</div>
+
+    <button type="button" class="predict-btn" onclick="showFinalPrediction()">🔍 Predict Sentiment</button>
+    <div id="final-result"></div>
+
+    <div class="suggestions">
+      <p>💡 Try a sample review:</p>
+      <ul>
+        <li onclick="insertSuggestion('This movie was a masterpiece, great acting and story!')">“This movie was a masterpiece, great acting and story!”</li>
+        <li onclick="insertSuggestion('Terrible plot. Total waste of time.')">“Terrible plot. Total waste of time.”</li>
+        <li onclick="insertSuggestion('I loved the visuals but the story was weak.')">“I loved the visuals but the story was weak.”</li>
+        <li onclick="insertSuggestion('Amazing direction and characters. Would watch again!')">“Amazing direction and characters. Would watch again!”</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>Made with ❤️ by <strong>Vrushabh Gillarkar</strong></p>
+    </footer>
+  </div>
+
+  <script>
+    const reviewBox = document.getElementById("review");
+    const feedbackDiv = document.getElementById("live-feedback");
+    const finalResult = document.getElementById("final-result");
+    const micBtn = document.getElementById("mic-btn");
+
+    micBtn.addEventListener("click", () => {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("Speech Recognition not supported");
+        return;
+      }
+      const recog = new webkitSpeechRecognition();
+      recog.continuous = false;
+      recog.interimResults = false;
+      recog.lang = 'en-US';
+      recog.start();
+
+      recog.onresult = e => {
+        const text = e.results[0][0].transcript;
+        reviewBox.value += (reviewBox.value ? " " : "") + text;
+        triggerLivePrediction();
+      };
+      recog.onerror = e => alert("Mic error: " + e.error);
+    });
+
+    function insertSuggestion(text) {
+      reviewBox.value = text;
+      triggerLivePrediction();
+      reviewBox.focus();
+    }
+
+    let debounceTimer;
+    reviewBox.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(triggerLivePrediction, 300);
+    });
+
+    function triggerLivePrediction() {
+      const text = reviewBox.value.trim();
+      finalResult.classList.remove('show');
+      feedbackDiv.classList.add('show');
+
+      if (!text) {
+        feedbackDiv.textContent = "Start typing to see live sentiment...";
+        feedbackDiv.className = "neutral show";
+        return;
+      }
+
+      $.ajax({
+        url: "/predict_live", type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ text }),
+        success: res => {
+          const emo = res.sentiment === "positive" ? "😊" : res.sentiment === "negative" ? "😞" : "😐";
+          feedbackDiv.innerHTML = `Live: <strong>${res.sentiment.toUpperCase()}</strong> ${emo}<br>Confidence: ${res.confidence}%`;
+          feedbackDiv.className = res.sentiment + " show";
+        },
+        error: () => {
+          feedbackDiv.innerHTML = "Error predicting sentiment.";
+          feedbackDiv.className = "neutral show";
+        }
+      });
+    }
+
+    function showFinalPrediction() {
+      const text = reviewBox.value.trim();
+      if (!text) {
+        finalResult.innerHTML = "<span style='color:#ffbaba'>Please enter a review first.</span>";
+        finalResult.classList.add('show');
+        return;
+      }
+      $.ajax({
+        url: "/predict_live", type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ text }),
+        success: res => {
+          const emo = res.sentiment === "positive" ? "🎉" : res.sentiment === "negative" ? "💔" : "😐";
+          finalResult.innerHTML = `Final Sentiment: <strong>${res.sentiment.toUpperCase()}</strong> ${emo}<br>Model Confidence: <strong>${res.confidence}%</strong>`;
+          finalResult.classList.add('show');
+        },
+        error: () => {
+          finalResult.innerHTML = "Something went wrong. Try again.";
+          finalResult.classList.add('show');
+        }
+      });
+    }
+    
+  </script>
+</body>
+</html>
